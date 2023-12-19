@@ -1,15 +1,28 @@
 from django.shortcuts import render
 
 from app.models import *
+
+from django.db.models.functions import Length
 # Create your views here.
 
 def display_topic(request):
     QLTO = Topic.objects.all()
+    
+    # arranging the data in a order way by ascending and descending order. 
+    QLTO = Topic.objects.order_by('topic_name')
+    QLTO = Topic.objects.order_by('-topic_name')
+    QLTO = Topic.objects.order_by(Length('topic_name'))
+    QLTO = Topic.objects.order_by(Length('topic_name').desc())
     d = {'QLTO':QLTO}
     return render(request,'display_topic.html',d)
 
 def display_webpage(request):
     QLWO = Webpage.objects.all()
+
+    QLWO = Webpage.objects.order_by('name')
+    QLWO = Webpage.objects.order_by('-url')
+    QLWO = Webpage.objects.order_by(Length('email').desc())
+    
     d = {'QLWO':QLWO}
     return render(request,'display_webpage.html',d)
 
@@ -48,3 +61,4 @@ def insert_access(request):
     QLAO = AccessRecord.objects.all()
     d = {'QLAO':QLAO}
     return render(request,'display_access.html',d)
+
